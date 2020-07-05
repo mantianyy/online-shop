@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mantian.dao.TestBeanMapper">
+  <resultMap id="BaseResultMap" type="com.mantian.bean.TestBean">
+    <id column="testInt" jdbcType="INTEGER" property="testint" />
+    <result column="testStr" jdbcType="VARCHAR" property="teststr" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    testInt, testStr
+  </sql>
+  <select id="selectByExample" parameterType="com.mantian.bean.TestBeanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from test_t
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from test_t
+    where testInt = #{testint,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from test_t
+    where testInt = #{testint,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mantian.bean.TestBeanExample">
+    delete from test_t
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mantian.bean.TestBean">
+    insert into test_t (testInt, testStr)
+    values (#{testint,jdbcType=INTEGER}, #{teststr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mantian.bean.TestBean">
+    insert into test_t
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="testint != null">
+        testInt,
+      </if>
+      <if test="teststr != null">
+        testStr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="testint != null">
+        #{testint,jdbcType=INTEGER},
+      </if>
+      <if test="teststr != null">
+        #{teststr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mantian.bean.TestBeanExample" resultType="java.lang.Long">
+    select count(*) from test_t
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update test_t
+    <set>
+      <if test="record.testint != null">
+        testInt = #{record.testint,jdbcType=INTEGER},
+      </if>
+      <if test="record.teststr != null">
+        testStr = #{record.teststr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update test_t
+    set testInt = #{record.testint,jdbcType=INTEGER},
+      testStr = #{record.teststr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mantian.bean.TestBean">
+    update test_t
+    <set>
+      <if test="teststr != null">
+        testStr = #{teststr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where testInt = #{testint,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mantian.bean.TestBean">
+    update test_t
+    set testStr = #{teststr,jdbcType=VARCHAR}
+    where testInt = #{testint,jdbcType=INTEGER}
+  </update>
+</mapper>
